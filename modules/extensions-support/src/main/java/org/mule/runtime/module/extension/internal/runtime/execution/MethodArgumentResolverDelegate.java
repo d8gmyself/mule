@@ -92,7 +92,10 @@ import org.mule.runtime.module.extension.internal.runtime.resolver.RetryPolicyTe
 import org.mule.runtime.module.extension.internal.runtime.resolver.RouterCallbackArgumentResolver;
 import org.mule.runtime.module.extension.internal.runtime.resolver.SdkCompletionCallbackArgumentResolver;
 import org.mule.runtime.module.extension.internal.runtime.resolver.SdkExtensionsClientArgumentResolver;
+import org.mule.runtime.module.extension.internal.runtime.resolver.SdkFlowListenerArgumentResolver;
 import org.mule.runtime.module.extension.internal.runtime.resolver.SdkRouterCallbackArgumentResolver;
+import org.mule.runtime.module.extension.internal.runtime.resolver.SdkSecurityContextHandlerArgumentResolver;
+import org.mule.runtime.module.extension.internal.runtime.resolver.SdkSourceResultArgumentResolver;
 import org.mule.runtime.module.extension.internal.runtime.resolver.SdkVoidCallbackArgumentResolver;
 import org.mule.runtime.module.extension.internal.runtime.resolver.SecurityContextHandlerArgumentResolver;
 import org.mule.runtime.module.extension.internal.runtime.resolver.LegacySourceCallbackContextArgumentResolver;
@@ -137,11 +140,17 @@ public final class MethodArgumentResolverDelegate implements ArgumentResolverDel
       new SdkVoidCallbackArgumentResolver(LEGACY_VOID_CALLBACK_ARGUMENT_RESOLVER);
   private static final ArgumentResolver<SourceCompletionCallback> ASYNC_SOURCE_COMPLETION_CALLBACK_ARGUMENT_RESOLVER =
       new SourceCompletionCallbackArgumentResolver();
-  private static final ArgumentResolver<AuthenticationHandler> SECURITY_CONTEXT_HANDLER =
+  private static final ArgumentResolver<AuthenticationHandler> LEGACY_SECURITY_CONTEXT_HANDLER =
       new SecurityContextHandlerArgumentResolver();
-  private static final ArgumentResolver<FlowListener> FLOW_LISTENER_ARGUMENT_RESOLVER = new FlowListenerArgumentResolver();
-  private static final ArgumentResolver<SourceResult> SOURCE_RESULT_ARGUMENT_RESOLVER =
+  private static final ArgumentResolver<org.mule.sdk.api.security.AuthenticationHandler> SECURITY_CONTEXT_HANDLER =
+      new SdkSecurityContextHandlerArgumentResolver(LEGACY_SECURITY_CONTEXT_HANDLER);
+  private static final ArgumentResolver<FlowListener> LEGACY_FLOW_LISTENER_ARGUMENT_RESOLVER = new FlowListenerArgumentResolver();
+  private static final ArgumentResolver<org.mule.sdk.api.runtime.operation.FlowListener> FLOW_LISTENER_ARGUMENT_RESOLVER =
+      new SdkFlowListenerArgumentResolver(LEGACY_FLOW_LISTENER_ARGUMENT_RESOLVER);
+  private static final ArgumentResolver<SourceResult> LEGACY_SOURCE_RESULT_ARGUMENT_RESOLVER =
       new SourceResultArgumentResolver(ERROR_ARGUMENT_RESOLVER, LEGACY_SOURCE_CALLBACK_CONTEXT_ARGUMENT_RESOLVER);
+  private static final ArgumentResolver<org.mule.sdk.api.runtime.source.SourceResult> SOURCE_RESULT_ARGUMENT_RESOLVER =
+      new SdkSourceResultArgumentResolver(ERROR_ARGUMENT_RESOLVER, SOURCE_CALLBACK_CONTEXT_ARGUMENT_RESOLVER);
   private static final ArgumentResolver<BackPressureContext> BACK_PRESSURE_CONTEXT_ARGUMENT_RESOLVER =
       new BackPressureContextArgumentResolver();
   private static final ArgumentResolver<ComponentLocation> COMPONENT_LOCATION_ARGUMENT_RESOLVER =
@@ -250,12 +259,19 @@ public final class MethodArgumentResolverDelegate implements ArgumentResolverDel
       } else if (MediaType.class.equals(parameterType)) {
         argumentResolver = MEDIA_TYPE_ARGUMENT_RESOLVER;
       } else if (AuthenticationHandler.class.equals(parameterType)) {
+        argumentResolver = LEGACY_SECURITY_CONTEXT_HANDLER;
+      } else if (org.mule.sdk.api.security.AuthenticationHandler.class.equals(parameterType)) {
         argumentResolver = SECURITY_CONTEXT_HANDLER;
       } else if (FlowListener.class.equals(parameterType)) {
+        argumentResolver = LEGACY_FLOW_LISTENER_ARGUMENT_RESOLVER;
+      } else if (org.mule.sdk.api.runtime.operation.FlowListener.class.equals(parameterType)) {
         argumentResolver = FLOW_LISTENER_ARGUMENT_RESOLVER;
-      } else if (StreamingHelper.class.equals(parameterType)) {
+      } else if (StreamingHelper.class.equals(parameterType)
+          || org.mule.sdk.api.runtime.streaming.StreamingHelper.class.equals(parameterType)) {
         argumentResolver = new StreamingHelperArgumentResolver();
       } else if (SourceResult.class.equals(parameterType)) {
+        argumentResolver = LEGACY_SOURCE_RESULT_ARGUMENT_RESOLVER;
+      } else if (org.mule.sdk.api.runtime.source.SourceResult.class.equals(parameterType)) {
         argumentResolver = SOURCE_RESULT_ARGUMENT_RESOLVER;
       } else if (BackPressureContext.class.equals(parameterType)) {
         argumentResolver = BACK_PRESSURE_CONTEXT_ARGUMENT_RESOLVER;

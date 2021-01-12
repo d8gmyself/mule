@@ -205,7 +205,7 @@ public class HeisenbergOperations implements Disposable {
   }
 
   public PagingProvider<HeisenbergConnection, Result<CursorProvider, Object>> getPagedCursorProviderBlacklist(@Config HeisenbergExtension config,
-                                                                                                              StreamingHelper streamingHelper) {
+                                                                                                              org.mule.sdk.api.runtime.streaming.StreamingHelper streamingHelper) {
 
     return new PagingProvider<HeisenbergConnection, Result<CursorProvider, Object>>() {
 
