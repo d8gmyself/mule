@@ -13,17 +13,18 @@ import org.mule.runtime.extension.api.tx.OperationTransactionalAction;
 import org.mule.runtime.module.extension.internal.runtime.resolver.ArgumentResolver;
 
 /**
+ * ADD JDOC
  * {@link ArgumentResolver} implementation for {@link OperationTransactionalAction} parameters
  *
  * @since 4.0
  */
-public class OperationTransactionalActionArgumentResolver implements ArgumentResolver<OperationTransactionalAction> {
+public class OperationTransactionalActionArgumentResolver implements ArgumentResolver<Object> {
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public OperationTransactionalAction resolve(ExecutionContext executionContext) {
-    return (OperationTransactionalAction) executionContext.getParameter(TRANSACTIONAL_ACTION_PARAMETER_NAME);
+  public Object resolve(ExecutionContext executionContext) {
+    return executionContext.getParameter(TRANSACTIONAL_ACTION_PARAMETER_NAME);
   }
 }

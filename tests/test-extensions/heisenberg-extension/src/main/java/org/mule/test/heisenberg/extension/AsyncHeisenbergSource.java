@@ -36,22 +36,23 @@ import org.mule.test.heisenberg.extension.stereotypes.AsyncSourceStereotype;
 public class AsyncHeisenbergSource extends HeisenbergSource {
 
   public static SourceCompletionCallback completionCallback;
+  public static org.mule.sdk.api.runtime.source.SourceCompletionCallback sdkCompletionCallback;
 
   @OnSuccess
   public void onSuccess(@Optional(defaultValue = PAYLOAD) Long payment, @Optional String sameNameParameter,
                         @org.mule.sdk.api.annotation.param.ParameterGroup(name = RICIN_GROUP_NAME) RicinGroup ricin,
                         @ParameterGroup(name = "Success Info", showInDsl = true) PersonalInfo successInfo,
                         @Optional boolean fail,
-                        SourceCompletionCallback completionCallback,
+                        org.mule.sdk.api.runtime.source.SourceCompletionCallback sdkCompletionCallback,
                         NotificationEmitter notificationEmitter) {
 
-    AsyncHeisenbergSource.completionCallback = completionCallback;
+    AsyncHeisenbergSource.sdkCompletionCallback = sdkCompletionCallback;
 
     try {
       super.onSuccess(payment, sameNameParameter, ricin, successInfo, fail, notificationEmitter);
-      completionCallback.success();
+      sdkCompletionCallback.success();
     } catch (Throwable t) {
-      completionCallback.error(t);
+      sdkCompletionCallback.error(t);
     }
   }
 

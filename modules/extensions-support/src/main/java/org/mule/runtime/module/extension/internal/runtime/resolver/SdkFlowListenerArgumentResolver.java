@@ -15,11 +15,8 @@ import org.mule.sdk.api.runtime.operation.FlowListener;
  */
 public class SdkFlowListenerArgumentResolver implements ArgumentResolver<FlowListener> {
 
-  private final ArgumentResolver<org.mule.runtime.extension.api.runtime.operation.FlowListener> flowListenerArgumentResolver;
-
-  public SdkFlowListenerArgumentResolver(ArgumentResolver<org.mule.runtime.extension.api.runtime.operation.FlowListener> flowListenerArgumentResolver) {
-    this.flowListenerArgumentResolver = flowListenerArgumentResolver;
-  }
+  private final ArgumentResolver<org.mule.runtime.extension.api.runtime.operation.FlowListener> flowListenerArgumentResolver =
+      new FlowListenerArgumentResolver();
 
   @Override
   public FlowListener resolve(ExecutionContext executionContext) {

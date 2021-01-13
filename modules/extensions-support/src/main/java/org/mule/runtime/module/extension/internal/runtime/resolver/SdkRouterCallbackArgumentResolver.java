@@ -15,11 +15,8 @@ import org.mule.sdk.api.runtime.process.RouterCompletionCallback;
  */
 public final class SdkRouterCallbackArgumentResolver implements ArgumentResolver<RouterCompletionCallback> {
 
-  private final ArgumentResolver<org.mule.runtime.extension.api.runtime.process.RouterCompletionCallback> routerCallbackArgumentResolver;
-
-  public SdkRouterCallbackArgumentResolver(ArgumentResolver<org.mule.runtime.extension.api.runtime.process.RouterCompletionCallback> routerCallbackArgumentResolver) {
-    this.routerCallbackArgumentResolver = routerCallbackArgumentResolver;
-  }
+  private final ArgumentResolver<org.mule.runtime.extension.api.runtime.process.RouterCompletionCallback> routerCallbackArgumentResolver =
+      new RouterCallbackArgumentResolver();
 
   @Override
   public RouterCompletionCallback resolve(ExecutionContext executionContext) {

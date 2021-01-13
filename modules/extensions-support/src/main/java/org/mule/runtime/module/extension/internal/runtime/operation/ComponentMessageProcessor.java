@@ -127,6 +127,7 @@ import org.mule.runtime.module.extension.internal.runtime.execution.interceptor.
 import org.mule.runtime.module.extension.internal.runtime.objectbuilder.DefaultObjectBuilder;
 import org.mule.runtime.module.extension.internal.runtime.objectbuilder.ObjectBuilder;
 import org.mule.runtime.module.extension.internal.runtime.operation.DefaultExecutionMediator.ResultTransformer;
+import org.mule.runtime.module.extension.internal.runtime.operation.adapter.OperationTransactionalActionUtils;
 import org.mule.runtime.module.extension.internal.runtime.resolver.ConfigOverrideValueResolverWrapper;
 import org.mule.runtime.module.extension.internal.runtime.resolver.ParameterValueResolver;
 import org.mule.runtime.module.extension.internal.runtime.resolver.ResolverSet;
@@ -1222,8 +1223,8 @@ public abstract class ComponentMessageProcessor<T extends ComponentModel> extend
   }
 
   private OperationTransactionalAction getTransactionalAction() throws MuleException {
-    ValueResolver<OperationTransactionalAction> resolver =
-        (ValueResolver<OperationTransactionalAction>) resolverSet.getResolvers().get(TRANSACTIONAL_ACTION_PARAMETER_NAME);
+    ValueResolver<Object> resolver =
+        (ValueResolver<Object>) resolverSet.getResolvers().get(TRANSACTIONAL_ACTION_PARAMETER_NAME);
     if (resolver == null) {
       throw new IllegalArgumentException(
                                          format("Operation '%s' from extension '%s' is transactional but no transactional action defined",
@@ -1233,7 +1234,7 @@ public abstract class ComponentMessageProcessor<T extends ComponentModel> extend
 
     CoreEvent initializerEvent = NullEventFactory.getNullEvent(muleContext);
     try {
-      return resolver.resolve(ValueResolvingContext.builder(initializerEvent).build());
+      return OperationTransactionalActionUtils.from(resolver.resolve(ValueResolvingContext.builder(initializerEvent).build()));
     } finally {
       ((BaseEventContext) initializerEvent.getContext()).success();
     }

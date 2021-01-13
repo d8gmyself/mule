@@ -66,6 +66,11 @@ public class TransactionalOperations {
     return action;
   }
 
+  public org.mule.sdk.api.tx.OperationTransactionalAction sdkInjectTransactionalAction(@Connection TestTransactionalConnection connection,
+                                                                                       org.mule.sdk.api.tx.OperationTransactionalAction action) {
+    return action;
+  }
+
   public PagingProvider<TestTransactionalConnection, Integer> pagedTransactionalOperation() throws Exception {
     return new PagingProvider<TestTransactionalConnection, Integer>() {
 

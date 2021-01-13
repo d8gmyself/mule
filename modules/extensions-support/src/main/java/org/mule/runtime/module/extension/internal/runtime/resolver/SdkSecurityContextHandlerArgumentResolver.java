@@ -15,11 +15,8 @@ import org.mule.sdk.api.security.AuthenticationHandler;
  */
 public final class SdkSecurityContextHandlerArgumentResolver implements ArgumentResolver<AuthenticationHandler> {
 
-  private final ArgumentResolver<org.mule.runtime.extension.api.security.AuthenticationHandler> authenticationHandlerArgumentResolver;
-
-  public SdkSecurityContextHandlerArgumentResolver(ArgumentResolver<org.mule.runtime.extension.api.security.AuthenticationHandler> authenticationHandlerArgumentResolver) {
-    this.authenticationHandlerArgumentResolver = authenticationHandlerArgumentResolver;
-  }
+  private final ArgumentResolver<org.mule.runtime.extension.api.security.AuthenticationHandler> authenticationHandlerArgumentResolver =
+      new SecurityContextHandlerArgumentResolver();
 
   @Override
   public AuthenticationHandler resolve(ExecutionContext executionContext) {

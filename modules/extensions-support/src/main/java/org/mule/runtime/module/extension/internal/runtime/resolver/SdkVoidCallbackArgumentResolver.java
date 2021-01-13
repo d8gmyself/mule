@@ -15,11 +15,8 @@ import org.mule.sdk.api.runtime.process.VoidCompletionCallback;;
  */
 public final class SdkVoidCallbackArgumentResolver implements ArgumentResolver<VoidCompletionCallback> {
 
-  private final ArgumentResolver<org.mule.runtime.extension.api.runtime.process.VoidCompletionCallback> voidCompletionCallbackArgumentResolver;
-
-  public SdkVoidCallbackArgumentResolver(ArgumentResolver<org.mule.runtime.extension.api.runtime.process.VoidCompletionCallback> voidCompletionCallbackArgumentResolver) {
-    this.voidCompletionCallbackArgumentResolver = voidCompletionCallbackArgumentResolver;
-  }
+  private final ArgumentResolver<org.mule.runtime.extension.api.runtime.process.VoidCompletionCallback> voidCompletionCallbackArgumentResolver =
+      new VoidCallbackArgumentResolver();
 
   @Override
   public VoidCompletionCallback resolve(ExecutionContext executionContext) {
