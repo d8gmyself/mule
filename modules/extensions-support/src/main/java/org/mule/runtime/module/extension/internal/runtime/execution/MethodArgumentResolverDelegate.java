@@ -288,7 +288,8 @@ public final class MethodArgumentResolverDelegate implements ArgumentResolverDel
       } else if (OperationTransactionalAction.class.equals(parameterType)
           || org.mule.sdk.api.tx.OperationTransactionalAction.class.equals(parameterType)) {
         argumentResolver = OPERATION_TRANSACTIONAL_ACTION_ARGUMENT_RESOLVER;
-      } else if (CorrelationInfo.class.equals(parameterType)) {
+      } else if (CorrelationInfo.class.equals(parameterType)
+          || org.mule.sdk.api.runtime.parameter.CorrelationInfo.class.equals(parameterType)) {
         argumentResolver = CORRELATION_INFO_ARGUMENT_RESOLVER;
       } else if (NotificationEmitter.class.equals(parameterType)) {
         argumentResolver = NOTIFICATION_HANDLER_ARGUMENT_RESOLVER;

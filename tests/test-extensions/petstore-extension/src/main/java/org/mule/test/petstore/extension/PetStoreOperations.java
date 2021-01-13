@@ -185,6 +185,11 @@ public class PetStoreOperations {
     return correlationInfo;
   }
 
+  @OutputResolver(output = SdkCorrelationInfoOutputResolver.class)
+  public org.mule.sdk.api.runtime.parameter.CorrelationInfo getSdkPetCorrelation(org.mule.sdk.api.runtime.parameter.CorrelationInfo correlationInfo) {
+    return correlationInfo;
+  }
+
   public ExclusivePetBreeder getBreeder(@ParameterGroup(name = "Exclusive") ExclusivePetBreeder breeder) {
     return breeder;
   }
@@ -271,6 +276,19 @@ public class PetStoreOperations {
     @Override
     public String getCategoryName() {
       return "correlationInfo";
+    }
+  }
+
+  public static class SdkCorrelationInfoOutputResolver implements OutputTypeResolver<CorrelationInfo> {
+
+    @Override
+    public MetadataType getOutputType(MetadataContext context, CorrelationInfo key) {
+      return context.getTypeLoader().load(org.mule.sdk.api.runtime.parameter.CorrelationInfo.class);
+    }
+
+    @Override
+    public String getCategoryName() {
+      return "sdkCorrelationInfo";
     }
   }
 
