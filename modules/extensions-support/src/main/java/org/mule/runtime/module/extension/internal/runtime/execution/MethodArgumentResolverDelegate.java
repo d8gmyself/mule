@@ -94,6 +94,7 @@ import org.mule.runtime.module.extension.internal.runtime.resolver.SdkBackPressu
 import org.mule.runtime.module.extension.internal.runtime.resolver.SdkCompletionCallbackArgumentResolver;
 import org.mule.runtime.module.extension.internal.runtime.resolver.SdkExtensionsClientArgumentResolver;
 import org.mule.runtime.module.extension.internal.runtime.resolver.SdkFlowListenerArgumentResolver;
+import org.mule.runtime.module.extension.internal.runtime.resolver.SdkNotificationHandlerArgumentResolver;
 import org.mule.runtime.module.extension.internal.runtime.resolver.SdkRouterCallbackArgumentResolver;
 import org.mule.runtime.module.extension.internal.runtime.resolver.SdkSecurityContextHandlerArgumentResolver;
 import org.mule.runtime.module.extension.internal.runtime.resolver.SdkSourceResultArgumentResolver;
@@ -162,8 +163,10 @@ public final class MethodArgumentResolverDelegate implements ArgumentResolverDel
       new OperationTransactionalActionArgumentResolver();
   private static final ArgumentResolver<CorrelationInfo> CORRELATION_INFO_ARGUMENT_RESOLVER =
       new CorrelationInfoArgumentResolver();
-  private static final ArgumentResolver<NotificationEmitter> NOTIFICATION_HANDLER_ARGUMENT_RESOLVER =
+  private static final ArgumentResolver<NotificationEmitter> LEGACY_NOTIFICATION_HANDLER_ARGUMENT_RESOLVER =
       new NotificationHandlerArgumentResolver();
+  private static final ArgumentResolver<org.mule.sdk.api.notification.NotificationEmitter> NOTIFICATION_HANDLER_ARGUMENT_RESOLVER =
+      new SdkNotificationHandlerArgumentResolver();
   private static final ArgumentResolver<RetryPolicyTemplate> RETRY_POLICY_TEMPLATE_ARGUMENT_RESOLVER =
       new RetryPolicyTemplateArgumentResolver();
 
@@ -292,6 +295,8 @@ public final class MethodArgumentResolverDelegate implements ArgumentResolverDel
           || org.mule.sdk.api.runtime.parameter.CorrelationInfo.class.equals(parameterType)) {
         argumentResolver = CORRELATION_INFO_ARGUMENT_RESOLVER;
       } else if (NotificationEmitter.class.equals(parameterType)) {
+        argumentResolver = LEGACY_NOTIFICATION_HANDLER_ARGUMENT_RESOLVER;
+      } else if (org.mule.sdk.api.notification.NotificationEmitter.class.equals(parameterType)) {
         argumentResolver = NOTIFICATION_HANDLER_ARGUMENT_RESOLVER;
       } else if (RetryPolicyTemplate.class.equals(parameterType)) {
         argumentResolver = RETRY_POLICY_TEMPLATE_ARGUMENT_RESOLVER;
