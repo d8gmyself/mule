@@ -195,7 +195,7 @@ public class SdkHeisenbergSource extends Source<String, Object> {
                                    @org.mule.sdk.api.annotation.param.ParameterGroup(name = "Error Info",
                                        showInDsl = true) PersonalInfo infoError,
                                    @Optional boolean propagateError,
-                                   NotificationEmitter notificationEmitter) {
+                                   org.mule.sdk.api.notification.NotificationEmitter notificationEmitter) {
     gatheredMoney = -1;
     receivedGroupOnSource = ricin != null && ricin.getNextDoor() != null && ricin.getNextDoor().getAddress() != null;
     receivedInlineOnError = infoError != null && infoError.getName() != null && !infoError.getName().equals(HEISENBERG)
@@ -229,7 +229,7 @@ public class SdkHeisenbergSource extends Source<String, Object> {
   }
 
   @OnBackPressure
-  public void onBackPressure(BackPressureContext ctx, NotificationEmitter notificationEmitter) {
+  public void onBackPressure(BackPressureContext ctx, org.mule.sdk.api.notification.NotificationEmitter notificationEmitter) {
     notificationEmitter.fireLazy(BATCH_FAILED, () -> ctx.getSourceCallbackContext().getVariable(BATCH_NUMBER).get(),
                                  fromType(Integer.class));
     heisenberg.onBackPressure(ctx);

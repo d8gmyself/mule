@@ -22,6 +22,7 @@ import static org.mule.test.heisenberg.extension.HeisenbergNotificationAction.KN
 
 import org.mule.runtime.api.connection.ConnectionException;
 import org.mule.runtime.api.exception.MuleException;
+import org.mule.runtime.api.future.SecretFutureFeature;
 import org.mule.runtime.api.lifecycle.Disposable;
 import org.mule.runtime.api.metadata.DataType;
 import org.mule.runtime.api.metadata.TypedValue;
@@ -62,6 +63,7 @@ import org.mule.runtime.extension.api.runtime.process.CompletionCallback;
 import org.mule.runtime.extension.api.runtime.route.Chain;
 import org.mule.runtime.extension.api.runtime.streaming.PagingProvider;
 import org.mule.runtime.extension.api.runtime.streaming.StreamingHelper;
+import org.mule.sdk.api.future.SecretSdkFutureFeature;
 import org.mule.test.heisenberg.extension.exception.CureCancerExceptionEnricher;
 import org.mule.test.heisenberg.extension.exception.HealthException;
 import org.mule.test.heisenberg.extension.exception.HeisenbergException;
@@ -103,6 +105,9 @@ import com.google.common.collect.ImmutableMap;
 
 @Stereotype(EmpireStereotype.class)
 public class HeisenbergOperations implements Disposable {
+
+  public static SecretSdkFutureFeature secretSdkFutureFeature = null;
+  public static SecretFutureFeature secretFutureFeature = null;
 
   public static final String CURE_CANCER_MESSAGE = "Can't help you, you are going to die";
   public static final String CALL_GUS_MESSAGE = "You are not allowed to speak with gus.";
@@ -387,7 +392,7 @@ public class HeisenbergOperations implements Disposable {
 
   @MediaType(TEXT_PLAIN)
   @Fires(KnockNotificationProvider.class)
-  public String knock(KnockeableDoor knockedDoor, NotificationEmitter notificationEmitter) {
+  public String knock(KnockeableDoor knockedDoor, org.mule.sdk.api.notification.NotificationEmitter notificationEmitter) {
     TypedValue<SimpleKnockeableDoor> door = of(new SimpleKnockeableDoor(knockedDoor));
     notificationEmitter.fire(KNOCKING_DOOR, door);
     String knock = knockedDoor.knock();
@@ -661,4 +666,13 @@ public class HeisenbergOperations implements Disposable {
       }
     };
   }
+
+  public void futureSdkImplicitHandling(SecretSdkFutureFeature secretSdkFutureFeature) {
+    HeisenbergOperations.secretSdkFutureFeature = secretSdkFutureFeature;
+  }
+
+  public void futureRuntimeImplicitHandling(SecretFutureFeature secretFutureFeature) {
+    HeisenbergOperations.secretFutureFeature = secretFutureFeature;
+  }
+
 }

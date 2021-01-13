@@ -14,6 +14,7 @@ import org.mule.runtime.api.meta.NamedObject;
 import org.mule.runtime.api.meta.model.ExtensionModel;
 import org.mule.runtime.api.meta.model.parameter.ParameterModel;
 import org.mule.runtime.api.metadata.MediaType;
+import org.mule.runtime.api.metadata.TypedValue;
 import org.mule.runtime.core.api.retry.policy.RetryPolicyTemplate;
 import org.mule.runtime.extension.api.annotation.param.Config;
 import org.mule.runtime.extension.api.annotation.param.Connection;
@@ -31,6 +32,8 @@ import org.mule.runtime.extension.api.runtime.source.SourceCompletionCallback;
 import org.mule.runtime.extension.api.runtime.source.SourceResult;
 import org.mule.runtime.extension.api.runtime.streaming.StreamingHelper;
 import org.mule.runtime.extension.api.security.AuthenticationHandler;
+import org.mule.sdk.api.runtime.parameter.Literal;
+import org.mule.sdk.api.runtime.parameter.ParameterResolver;
 
 import java.lang.reflect.AnnotatedElement;
 import java.util.Set;
@@ -78,12 +81,26 @@ public interface ExtensionParameter extends WithType, WithAnnotations, NamedObje
       .add(RetryPolicyTemplate.class)
       .build();
 
+  Set<String> IMPLICIT_ARGUMENT_PACKAGES = ImmutableSet.<String>builder()
+      .add("org.mule.sdk")
+      .add("org.mule.runtime")
+      .build();
+
+  Set<Class<?>> EXPLICIT_MULE_ARGUMENT_TYPES = ImmutableSet.<Class<?>>builder()
+      .add(TypedValue.class)
+      .add(ParameterResolver.class)
+      .add(org.mule.runtime.extension.api.runtime.parameter.ParameterResolver.class)
+      .add(org.mule.runtime.extension.api.runtime.parameter.Literal.class)
+      .add(Literal.class)
+      .build();
+
   /**
    * @return A {@code boolean} indicating whether the parameter should be advertised and added as a {@link ParameterModel} in the
    *         {@link ExtensionModel}
    */
   default boolean shouldBeAdvertised() {
-    return !(IMPLICIT_ARGUMENT_TYPES.stream().anyMatch(aClass -> getType().isAssignableTo(aClass))
+    return !((IMPLICIT_ARGUMENT_PACKAGES.stream().anyMatch(packageName -> getType().getTypeName().startsWith(packageName))
+        && !EXPLICIT_MULE_ARGUMENT_TYPES.stream().anyMatch(aClass -> getType().isAssignableTo(aClass)))
         || isAnnotatedWith(Config.class) || isAnnotatedWith(org.mule.sdk.api.annotation.param.Config.class)
         || isAnnotatedWith(org.mule.sdk.api.annotation.param.Connection.class) || isAnnotatedWith(Connection.class)
         || isAnnotatedWith(DefaultEncoding.class) || isAnnotatedWith(org.mule.sdk.api.annotation.param.DefaultEncoding.class));

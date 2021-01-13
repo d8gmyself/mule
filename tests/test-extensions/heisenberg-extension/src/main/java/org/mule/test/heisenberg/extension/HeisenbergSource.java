@@ -238,7 +238,7 @@ public class HeisenbergSource extends Source<String, Object> {
   }
 
   @OnBackPressure
-  public void onBackPressure(BackPressureContext ctx, NotificationEmitter notificationEmitter) {
+  public void onBackPressure(BackPressureContext ctx, org.mule.sdk.api.notification.NotificationEmitter notificationEmitter) {
     notificationEmitter.fireLazy(BATCH_FAILED, () -> ctx.getSourceCallbackContext().getVariable(BATCH_NUMBER).get(),
                                  fromType(Integer.class));
     heisenberg.onBackPressure(ctx);
