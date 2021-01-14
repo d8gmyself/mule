@@ -15,6 +15,7 @@ import org.mule.runtime.api.meta.model.ExtensionModel;
 import org.mule.runtime.api.meta.model.parameter.ParameterModel;
 import org.mule.runtime.api.metadata.MediaType;
 import org.mule.runtime.api.metadata.TypedValue;
+import org.mule.runtime.api.tls.TlsContextFactory;
 import org.mule.runtime.core.api.retry.policy.RetryPolicyTemplate;
 import org.mule.runtime.extension.api.annotation.param.Config;
 import org.mule.runtime.extension.api.annotation.param.Connection;
@@ -82,8 +83,9 @@ public interface ExtensionParameter extends WithType, WithAnnotations, NamedObje
       .build();
 
   Set<String> IMPLICIT_ARGUMENT_PACKAGES = ImmutableSet.<String>builder()
-      .add("org.mule.sdk")
-      .add("org.mule.runtime")
+      .add("org.mule.sdk.api")
+      .add("org.mule.runtime.api")
+      .add("org.mule.runtime.extension.api")
       .build();
 
   Set<Class<?>> EXPLICIT_MULE_ARGUMENT_TYPES = ImmutableSet.<Class<?>>builder()
@@ -92,6 +94,7 @@ public interface ExtensionParameter extends WithType, WithAnnotations, NamedObje
       .add(org.mule.runtime.extension.api.runtime.parameter.ParameterResolver.class)
       .add(org.mule.runtime.extension.api.runtime.parameter.Literal.class)
       .add(Literal.class)
+      .add(TlsContextFactory.class)
       .build();
 
   /**
