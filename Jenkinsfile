@@ -1,4 +1,4 @@
-def UPSTREAM_PROJECTS_LIST = ["Mule-runtime/mule-common/support/3.8.4"]
+def UPSTREAM_PROJECTS_LIST = ["Mule-runtime/mule-common/support/3.8.4-DRY-RUN"]
 
 Map pipelineParams = ["upstreamProjects"   : UPSTREAM_PROJECTS_LIST.join(','),
                       "mavenTool"          : "M3",
